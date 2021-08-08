@@ -31,12 +31,6 @@
         }
       ]
     },
-    "mode": {
-      "type": "string",
-      "enum": ["update", "replace", "append"],
-      "description": "Mode of operation",
-      "default": "update"
-    },
     "files": {
       "type": "array",
       "items": {
