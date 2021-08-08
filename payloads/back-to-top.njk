@@ -1,0 +1,6 @@
+{% comment %}
+This implies that you give the webhook and the entire message cache up to this point to the template, and then you can use the template to generate the message.
+Other variables could also be added to the template, such as the current time, the current user, etc. - but I didn't get that far.
+{% endcomment %}
+
+content: "[:arrow_up: Back to top](<https://discord.com/channels/{{ webhook.guild_id }}/{{ webhook.channel_id }}/{{ messages[0] }}>)"

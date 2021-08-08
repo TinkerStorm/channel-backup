@@ -1,0 +1,6 @@
+embeds:
+  - description: |
+      This channel has been backed up using [TinkerStorm/channel-backup](https://github.com/TinkerStorm/channel-backup).
+      If you find a problem, please [create an issue](https://github.com/TinkerStorm/channel-backup/issues/new/choose) on GitHub.
+    color: 7506394 # old Discord blurple (#7289DA)
+    # timestamp: {{ Date.now() }}

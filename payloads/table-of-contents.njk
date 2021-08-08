@@ -1,0 +1,14 @@
+{% comment %}
+This implies that it is at the end of the sequence.
+It could be altered to determine where 'groups' are located (which is part of the idea for dividers, {index} % {count} where title exists).
+There could be an alternative where the entire message is provided instead of just having the ID available... which this requires.
+Figurativly, plugins could listen as each message is sent and store the entire payload in a cache within that scope and then handle the table of contents that way.
+{% endcomment %}
+
+{% set numberMap = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"] %}
+{% macro numberToEmoji(n, shift) %}{% for digit in n.toString().padLeft("0", shift).split("") %}{{ numberMap[+digit] }}{% endfor %}{% endmacro %}
+embeds:
+  - description: | {% set shift = messages.length // 10 %}
+      {% for item in messages %}
+      {{ numberToEmojis(loop.index, shift) }} **[{{ msg.embeds[0].title }}](https://discord.com/channels/{{ msg.guild.id }}/{{ msg.channel.id }}/{{ msg.id }})**
+      {% endfor %}
