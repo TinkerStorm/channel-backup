@@ -8,12 +8,11 @@ I am aware this program does not follow the regular conventions of an interface,
 
 ## Usage
 
-The `cache.json` file that contains message IDs of all messages sent in the previous sequence (local updated). For any data structure files (including `yml` and `json`) are following the structural pattern of [WebhookMessageOptions (discord.js)][https://discord.js.org/#/docs/main/stable/typedef/WebhookMessageOptions].
+The `cache.json` file that contains message IDs of all messages sent in the previous sequence (local updated). For any data structure files (including `yml` and `json`) are following the structural pattern of [WebhookMessageOptions (discord.js)](https://discord.js.org/#/docs/main/stable/typedef/WebhookMessageOptions).
 
 ```
 Usage
   $ channel-backup [options]
-  $ npx channel-backup [options]
 
 Options
   -h, --help       Show this help.
@@ -80,4 +79,3 @@ Options
 - CLI refactor for standardized keywords (create, run, purge, etc.)
 - Multi language support (python, go, rust)
 - Move to TypeScript
-- 

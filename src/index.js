@@ -22,6 +22,7 @@ export async function sequence(options) {
 			}
 		},
 	};
+	
 	if (context.config.mode !== 'replace') {
 		await cleanup(context);
 	}
