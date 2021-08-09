@@ -6,26 +6,26 @@ import {loadFile} from './util/common.js';
 import {sequence} from './index.js';
 
 const cli = meow(`
-  Usage
-    $ channel-backup [options]
+	Usage
+		$ channel-backup [options]
 
-  Options
-    -h, --help       Show this help.
-    -v, --version    Show version.
-    -c, --config     Specify config file (defaults to '{directory}/config.json').
-    -m, --mode       Specify mode (replace, =update)
-      * replace: replace all messages in the channel.
-      * =update: update all messages in the channel (default).
-    -d, --directory  Specify directory to backup (defaults to current working directory).
-    -s, --silent     Don't output anything.
-  
-  Examples
-    $ channel-backup -c config.json -m replace
+	Options
+		-h, --help       Show this help.
+		-v, --version    Show version.
+		-c, --config     Specify config file (defaults to '{directory}/config.json').
+		-m, --mode       Specify mode (replace, =update)
+			* replace: replace all messages in the channel.
+			* =update: update all messages in the channel (default).
+		-d, --directory  Specify directory to backup (defaults to current working directory).
+		-s, --silent     Don't output anything.
 
-  Notes
-    * --help and --version will terminate the program.
-    * '--mode update' will remove excess content after it has finished.
-    * '--mode replace' will remove all content it is aware of before it starts.
+	Examples
+		$ channel-backup -c config.json -m replace
+
+	Notes
+		* --help and --version will terminate the program.
+		* '--mode update' will remove excess content after it has finished.
+		* '--mode replace' will remove all content it is aware of before it starts.
 `, {
 	importMeta: import.meta,
 	flags: {
