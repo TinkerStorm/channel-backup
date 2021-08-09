@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import {readFile, writeFile} from 'fs/promises';
-import path from 'path';
+import {readFile, writeFile} from 'node:fs/promises';
+import path from 'node:path';
 import meow from 'meow';
-import {loadFile} from './util/common';
-import {sequence} from '.';
+import {loadFile} from './util/common.js';
+import {sequence} from './index.js';
 
 const cli = meow(`
   Usage

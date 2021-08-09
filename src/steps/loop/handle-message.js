@@ -1,5 +1,5 @@
 import {Util} from 'discord.js';
-import {getWebhook} from '../../util/common';
+import {getWebhook} from '../../util/common.js';
 /**
  * @param {any} ctx
  * @param {WebhookMessageOptions} payload

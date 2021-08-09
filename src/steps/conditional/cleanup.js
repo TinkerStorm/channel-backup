@@ -1,4 +1,4 @@
-import {delay, getWebhook} from '../../util/common';
+import {delay, getWebhook} from '../../util/common.js';
 
 export default async function cleanup(context) {
 	const webhook = getWebhook(context);

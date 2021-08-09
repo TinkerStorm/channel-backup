@@ -1,11 +1,11 @@
 import {MessageEmbed} from 'discord.js';
-import {delay} from './util/common';
+import {delay} from './util/common.js';
 // #region Steps
-import cleanup from './steps/conditional/cleanup';
-import discover from './steps/discover';
-import buildPayload from './steps/loop/build-payload';
-import authorResolver from './plugins/author-resolver';
-import handleMessage from './steps/loop/handle-message';
+import cleanup from './steps/conditional/cleanup.js';
+import discover from './steps/discover.js';
+import buildPayload from './steps/loop/build-payload.js';
+import authorResolver from './plugins/author-resolver.js';
+import handleMessage from './steps/loop/handle-message.js';
 // #endregion
 
 /**
@@ -22,7 +22,7 @@ export async function sequence(options) {
 			}
 		},
 	};
-	
+
 	if (context.config.mode !== 'replace') {
 		await cleanup(context);
 	}

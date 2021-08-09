@@ -1,6 +1,6 @@
-import {parse} from 'path'; // eslint-disable-line unicorn/import-style
+import {parse} from 'node:path';
 import yaml from 'yaml';
-import {loadFile} from '../../util/common';
+import {loadFile} from '../../util/common.js';
 
 /**
  * @param {any} ctx
