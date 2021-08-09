@@ -36,6 +36,16 @@
       "items": {
         "type": "string"        
       }
+    },
+    "authors": {
+      "description": "A map of author avatars.",
+      "type": "object",
+      "patternProperties": {
+        "^*+$": {
+          "type": "string",
+          "description": "The avatar to resolve to."
+        }
+      }
     }
   }
 }

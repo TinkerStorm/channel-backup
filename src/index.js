@@ -9,10 +9,20 @@ import handleMessage from './steps/loop/handle-message.js';
 // #endregion
 
 /**
+ * @typedef {Object} SequenceOptions
+ * @property {{webhook:any,files:string[]}} config
+ * @property {string} [mode='update']
+ * @property {string} [directory=process.cwd()]
+ * @property {boolean} [verbose=true]
+ * @property {string[]} [cache={}]
+ */
+
+/**
  * @param {SequenceOptions} options
- * @returns {Promise<any>}
+ * @returns {Promise<SequenceOptions & { messages: string[] }>}
  */
 export async function sequence(options) {
+	/** @extends {SequenceOptions} */
 	const context = {
 		...options,
 		messages: [],
@@ -33,7 +43,7 @@ export async function sequence(options) {
 	// eslint-disable-next-line guard-for-in
 	for (const index in manifest) {
 		const file = manifest[index];
-		const filePath = `${context.config.directory}/${file}`;
+		const filePath = `${context.directory}/${file}`;
 
 		/** @type {import("discord.js").WebhookMessageOptions} */
 		let payload = await buildPayload(context, filePath);
