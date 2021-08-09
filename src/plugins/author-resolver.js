@@ -8,8 +8,8 @@ export default function authorResolver(ctx, payload) {
 	const {authors} = ctx.config;
 
 	if (!authors) {
-		ctx.log('plugin(author-resolver): No authors found.');
-		return;
+		// ctx.log('plugin(author-resolver): No authors found.');
+		return payload;
 	}
 
 	if (payload.username && !payload.avatarURL && authors[payload.username]) {

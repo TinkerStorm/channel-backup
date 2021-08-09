@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {readFile, writeFile} from 'node:fs/promises';
+import {writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import meow from 'meow';
 import {loadFile} from './util/common.js';
@@ -20,7 +20,7 @@ const cli = meow(`
     -s, --silent     Don't output anything.
   
   Examples
-    $ channel-backup -c config.json -m append
+    $ channel-backup -c config.json -m replace
 
   Notes
     * --help and --version will terminate the program.
@@ -49,18 +49,16 @@ const cli = meow(`
 			process.exit(1);
 		});
 
-	const cache = await readFile(cli.flags.directory, 'cache.json')
-		.then(file => JSON.parse(file.toJSON()))
-		.catch(() => ({}));
+	const cache = await loadFile(cli.flags.directory, 'cache.json')
+		.then(file => JSON.parse(file.toString()))
+		.catch(() => ({})); // allow file read to fail if it does not exist
 	// #endregion
 
 	if (typeof config.webhook === 'string') {
-		const [, id, token] = config.webhook
-			.match(/https:\/\/discord\.com\/api\/webhooks\/(\d+)\/([A-Za-z\d.-]+)/);
+		const [, id, token] = config.webhook.match(/^https?:\/\/discord\.com\/api\/webhooks\/([0-9]+)\/([A-Za-z0-9_-]+)/i);
 		config.webhook = {id, token};
 	}
-
-	// #region Parse config
+	
 	const result = await sequence({
 		config,
 		cache: cache[config.webhook.id] || [],
@@ -72,6 +70,6 @@ const cli = meow(`
 	// Export new cache
 	cache[config.webhook.id] = result.messages;
 
-	await writeFile(path.join(cli.flags.directory, 'cache.json'), JSON.stringify(result.messages));
+	await writeFile(path.join(cli.flags.directory, 'cache.json'), JSON.stringify(cache));
 	result.log(`step(cleanup:${cli.flags.mode}) ${result.messages.length} messages.`);
 })();

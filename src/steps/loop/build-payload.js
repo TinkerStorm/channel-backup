@@ -5,22 +5,22 @@ import {loadFile} from '../../util/common.js';
 /**
  * @param {any} ctx
  * @param {string} filePath
- * @returns {import("discord.js").WebhookMessageOptions}
+ * @returns {Promise<import("discord.js").WebhookMessageOptions>}
  */
 export default async function buildPayload(ctx, filePath) {
 	const {name, ext} = parse(filePath);
-	let content = await loadFile(filePath);
+	const attachment = await loadFile(ctx.directory, filePath);
 
 	if (['.png', '.jpg', '.jpeg', '.gif', '.webp'].includes(ext)) {
 		return {
 			files: [{
-				name,
-				attachment: content,
+				name: `${name}.${ext}`,
+				attachment,
 			}],
 		};
 	}
 
-	content = content.toString('utf8');
+	const content = attachment.toString('utf8');
 
 	switch (ext) {
 		case '.txt':
@@ -36,6 +36,5 @@ export default async function buildPayload(ctx, filePath) {
 
 		default:
 			ctx.log(`steps(build-payload): Unsupported file type: ${ext} (${filePath})`);
-			return null;
 	}
 }

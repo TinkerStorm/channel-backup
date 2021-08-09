@@ -8,7 +8,7 @@ I am aware this program does not follow the regular conventions of an interface,
 
 ## Usage
 
-The `cache.json` file that contains message IDs of all messages sent in the previous sequence (local updated). For any data structure files (including `yml` and `json`) are following the structural pattern of [WebhookMessageOptions (discord.js)](https://discord.js.org/#/docs/main/stable/typedef/WebhookMessageOptions).
+The `cache.json` file that contains message IDs of all messages sent in the previous sequence (local updated). For any data structure files (including `yml` and `json`) are following the structural pattern of [WebhookMessageOptions (discord.js)](https://discord.js.org/#/docs/main/stable/typedef/WebhookMessageOptions). `cache.json` is both fetched and dumped wherever the `{directory}` was set to.
 
 ```
 Usage
@@ -29,14 +29,24 @@ Options
 
 ```json
 {
-  "$schema": "https://github.com/TinkerStorm/channel-backup/blob/main/schema.json",
-  "webhook": "https://discord.com/api/webhooks/:id/:token", // either a webhook uri or an object
+  "$schema": "https://github.com/TinkerStorm/channel-backup/blob/main/schemas/config.json",
+  "webhook": "https://discord.com/api/webhooks/:id/:token",
   "files": [
     "./path/to/file.md",
     "./path/to/*.md"
-  ]
+  ],
+  "authors": {
+    "sudojunior": "https://github.com/sudojunior.png"
+  }
 }
 ```
+
+- `$schema` - uses the schema stored at the primary branch to help build the configuration
+  > Some properties may not exist here if they are added in plugins.
+- `webhook` - either a webhook uri as string or an object `{ id, token }`
+- `files` - An array of files which are sent through the webhook (can either be direct files or globs)
+- `authors` (optional, plugin) - A map of authors to avatars.
+  > When using 'username' or 'embeds.*.author.name' in full payloads (yml, json), this map will be used if the related avatar or icon slot is not filled.
 
 ## Sequence Flow
 
@@ -73,9 +83,14 @@ Options
 
 ## Future Advancements
 
-- Custom webhook wrapper.
+- Custom webhook wrapper
 - Plugin support (templates, payload 'injection')
-- GitHub Actions
+- GitHub Actions ([#1](https://github.com/TinkerStorm/channel-backup/issues/1))
 - CLI refactor for standardized keywords (create, run, purge, etc.)
-- Multi language support (python, go, rust)
+- Multi language support? (python, go, rust)
 - Move to TypeScript
+- Demos, Templates, Show & Tell, etc.
+
+## License
+
+  [MIT](LICENSE)

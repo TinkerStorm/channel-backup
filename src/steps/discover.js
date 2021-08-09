@@ -1,3 +1,4 @@
+import {join} from 'node:path';
 import {isGitIgnored, isDynamicPattern, globby} from 'globby';
 
 export default async function discover(ctx) {
@@ -14,5 +15,6 @@ export default async function discover(ctx) {
 		ctx.log(`Found ${found.length} files in ${file}`);
 	}
 
-	return manifest.filter(file => !isIgnored(file));
+	return manifest.filter(file => !isIgnored(file))
+		.map(file => join(ctx.directory, file));
 }

@@ -17,4 +17,5 @@ export function delay(ms) {
 
 export function getWebhook(context) {
 	return new WebhookClient(context.config.webhook);
+	// { id, token } | { url }
 }

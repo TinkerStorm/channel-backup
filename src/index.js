@@ -1,5 +1,4 @@
 import {MessageEmbed} from 'discord.js';
-import {delay} from './util/common.js';
 // #region Steps
 import cleanup from './steps/conditional/cleanup.js';
 import discover from './steps/discover.js';
@@ -26,14 +25,14 @@ export async function sequence(options) {
 	const context = {
 		...options,
 		messages: [],
-		log: (...args) => {
-			if (options.config.verbose) {
-				console.log(...args);
+		log: (msg, { force = false } = {}) => {
+			if (options.verbose || force) {
+				console.log(msg);
 			}
 		},
 	};
 
-	if (context.config.mode !== 'replace') {
+	if (context.mode === 'replace') {
 		await cleanup(context);
 	}
 
@@ -42,13 +41,13 @@ export async function sequence(options) {
 
 	// eslint-disable-next-line guard-for-in
 	for (const index in manifest) {
-		const file = manifest[index];
-		const filePath = `${context.directory}/${file}`;
+		const filePath = manifest[index];
 
 		/** @type {import("discord.js").WebhookMessageOptions} */
 		let payload = await buildPayload(context, filePath);
-		if (!payload) {
+		if (!payload || payload === null || payload === undefined) {
 			skippedFiles++;
+			context.log(`steps(build-payload): Skipping '${filePath}', content missing`);
 			continue; // Unknown file type catch
 		}
 
@@ -60,11 +59,12 @@ export async function sequence(options) {
 		payload = authorResolver(context, payload);
 
 		await handleMessage(context, payload, filePath, index - skippedFiles);
-		await delay(1000);
 	}
 
-	const remainingMessages = context.cache.slice(manifest.length - skippedFiles);
-	await cleanup(remainingMessages);
+	const remainingMessages = context.cache.slice(context.messages.length);
+	if(remainingMessages.length > 0) {
+		await cleanup(context, remainingMessages);
+	}
 	return context;
 }
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/channel-backup-config.schema.json",
+  "$id": "https://github.com/TinkerStorm/channel-backup/raw/main/schemas/config.json",
   "title": "Channel Backup Configuration",
   "description": "Channel Backup Configuration",
   "type": "object",
@@ -12,7 +12,7 @@
         {
           "type": "string",
           "format": "uri",
-          "pattern": "^https://discord.com/api/webhooks/[0-9]+/[0-9a-zA-Z-_]+$"
+          "pattern": "^https?:\/\/discord\\.com\/api\/webhooks\/[0-9]+\/[A-Za-z0-9_-]+$"
         },
         {
           "type": "object",
@@ -23,7 +23,7 @@
             },
             "token": {
               "type": "string",
-              "pattern": "^[0-9a-zA-Z-]+$"
+              "pattern": "^[A-Za-z0-9_-]+$"
             }
           },
           "required": [ "id", "token" ],
@@ -47,5 +47,6 @@
         }
       }
     }
-  }
+  },
+  "required": [ "webhook", "files" ]
 }
