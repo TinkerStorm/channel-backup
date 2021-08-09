@@ -11,7 +11,7 @@ export default async function discover(ctx) {
 
 		manifest.push(...found);
 
-		ctx.debug(`Found ${found.length} files in ${file}`);
+		ctx.log(`Found ${found.length} files in ${file}`);
 	}
 
 	return manifest.filter(file => !isIgnored(file));
