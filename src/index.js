@@ -25,9 +25,9 @@ export async function sequence(options) {
 	const context = {
 		...options,
 		messages: [],
-		log: (msg, { force = false } = {}) => {
+		log: (message, {force = false} = {}) => {
 			if (options.verbose || force) {
-				console.log(msg);
+				console.log(message);
 			}
 		},
 	};
@@ -62,9 +62,10 @@ export async function sequence(options) {
 	}
 
 	const remainingMessages = context.cache.slice(context.messages.length);
-	if(remainingMessages.length > 0) {
+	if (remainingMessages.length > 0) {
 		await cleanup(context, remainingMessages);
 	}
+
 	return context;
 }
 
