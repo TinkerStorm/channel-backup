@@ -5,14 +5,14 @@ export default async function cleanup(context, messages = context.cache) {
 
 	context.log(`steps(cleanup) Removing ${messages.length} messages`);
 
-	while (messages.length > 0) { // array mutation, prevent duplicate method attempts
+	while (messages.length > 0) { // Array mutation, prevent duplicate method attempts
 		const message = messages.shift();
 
 		await delay(1000);
 		try {
 			await webhook.deleteMessage(message);
-		} catch (err) {
-			context.log(`fail:steps(cleanup) Failed to delete message: ${err}`,{force:true});
+		} catch (error) {
+			context.log(`fail:steps(cleanup) Failed to delete message: ${error}`, {force: true});
 		}
 	}
 }

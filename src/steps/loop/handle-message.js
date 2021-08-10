@@ -11,16 +11,12 @@ export default async function handleMessage(ctx, payload, path, index) {
 	const cacheID = ctx.cache[index];
 	const webhook = getWebhook(ctx);
 
-	let message;
-	if (ctx.mode === 'update' && cacheID) {
-		// Deep equal check is currently not supported
-		message = await webhook.editMessage(cacheID, payload);
-	} else {
-		message = await webhook.send(payload);
-	}
+	const message = await (ctx.mode === 'update' && cacheID
+		? webhook.editMessage(cacheID, payload)
+		: webhook.send(payload));
 
 	ctx.messages.push(message.id);
 	ctx.log(`steps(handle-message) '${path}' -> '${message.id}'`);
-	
+
 	await delay(1000);
 }
