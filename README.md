@@ -50,6 +50,8 @@ Options
 - `$schema` - uses the schema stored at the primary branch to help build the configuration
   > Some properties may not exist here if they are added in plugins.
 - `webhook` - either a webhook uri as string or an object `{ id, token }`
+  > Alternatively, this can be omitted in favor of using an environment variable.
+  > At present, `dotenv` is not used to load the environment variables on .
 - `files` - An array of files which are sent through the webhook (can either be direct files or globs)
 - `authors` (optional, plugin) - A map of authors to avatars.
   > When using 'username' or 'embeds.*.author.name' in full payloads (yml, json), this map will be used if the related avatar or icon slot is not filled.
