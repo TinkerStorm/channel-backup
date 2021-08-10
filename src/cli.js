@@ -51,14 +51,19 @@ const cli = meow(`
 
 	const cache = await loadFile(cli.flags.directory, 'cache.json')
 		.then(file => JSON.parse(file.toString()))
-		.catch(() => ({})); // allow file read to fail if it does not exist
+		.catch(() => ({})); // Allow file read to fail if it does not exist
 	// #endregion
 
+	if (!config.webhook) {
+		// eslint-disable-next-line node/prefer-global/process
+		config.webhook = process.env.WEBHOOK_URL;
+	}
+
 	if (typeof config.webhook === 'string') {
-		const [, id, token] = config.webhook.match(/^https?:\/\/discord\.com\/api\/webhooks\/([0-9]+)\/([A-Za-z0-9_-]+)/i);
+		const [, id, token] = config.webhook.match(/^https?:\/\/discord\.com\/api\/webhooks\/(\d+)\/([\w-]+)/i);
 		config.webhook = {id, token};
 	}
-	
+
 	const result = await sequence({
 		config,
 		cache: cache[config.webhook.id] || [],
