@@ -1,5 +1,11 @@
 # channel-backup
 
+![GitHub branch checks state](https://img.shields.io/github/checks-status/TinkerStorm/channel-backup/main)
+![GitHub repo size](https://img.shields.io/github/repo-size/TinkerStorm/channel-backup)
+![GitHub Repo stars](https://img.shields.io/github/stars/TinkerStorm/channel-backup?style=social)
+![npm](https://img.shields.io/npm/v/channel-backup)
+![node-current](https://img.shields.io/node/v/channel-backup)
+
 A command line tool to help Community Managers keep their information channels updated.
 
 Notes on progress can be found on the [project board](https://github.com/TinkerStorm/channel-backup/projects/1) or on the [Discord channel](https://discord.gg/7k6uS7kw5k).
@@ -29,7 +35,7 @@ Options
 
 ```json
 {
-  "$schema": "https://github.com/TinkerStorm/channel-backup/blob/main/schemas/config.json",
+  "$schema": "https://github.com/TinkerStorm/channel-backup/raw/main/schemas/config.json",
   "webhook": "https://discord.com/api/webhooks/:id/:token",
   "files": [
     "./path/to/file.md",
@@ -69,15 +75,15 @@ Options
 ## File Support
 
 - Images are attached as `{ attachment, name: "{name}.{ext}" }`
-  - !PNG
-  - !GIF
-  - !JPG / !JPEG
+  - PNG
+  - GIF
+  - JPG / JPEG
 - Structured files are sent as is
-  - !JSON
-  - !YAML / !YML
-  - !TXT / !MD *both treated as markdown*
+  - JSON
+  - YAML / YML
+  - TXT / MD *both treated as markdown*
 - Templates
-  > While there is no support for template engines like nunjucks, ejs or liquid - with the intention to move to plugins, these could become plugins themselves. The theorised event hooks / listeners will reinforce the design by having them listen for certain files (native file handlers will be included as standard but follow the same internal design as plugins - marked with `!`).
+  > While there is no support for template engines like nunjucks, ejs or liquid - with the intention to move to plugins, these could become plugins themselves. The theorised event hooks / listeners will reinforce the design by having them listen for certain files (native file handlers will be included as standard but follow the same internal design as plugins).
 
 ---
 
@@ -93,4 +99,4 @@ Options
 
 ## License
 
-  [MIT](LICENSE)
+This package uses the [MIT](LICENSE) license.
