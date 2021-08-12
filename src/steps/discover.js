@@ -6,13 +6,18 @@ export default async function discover(ctx) {
 	const isIgnored = await isGitIgnored({cwd: ctx.directory});
 
 	for (const file of ctx.config.files) {
-		const found = isDynamicPattern(file, {cwd: ctx.directory})
-			? await globby(file, {cwd: ctx.directory})
-			: [file];
+		const {path, reverse = false} = typeof file === 'string'
+			? {path: file} : file;
+
+		const found = isDynamicPattern(path, {cwd: ctx.directory})
+			? await globby(path, {cwd: ctx.directory})
+			: [path];
+
+		if (reverse) found.reverse();
 
 		manifest.push(...found);
 
-		ctx.log(`Found ${found.length} files in ${file}`);
+		ctx.log(`Found ${found.length} files in ${path}`);
 	}
 
 	return manifest.filter(file => !isIgnored(file))

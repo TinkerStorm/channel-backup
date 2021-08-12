@@ -51,6 +51,7 @@ Options
   > Some properties may not exist here if they are added in plugins.
 - `webhook` - either a webhook uri as string or an object `{ id, token }`
 - `files` - An array of files which are sent through the webhook (can either be direct files or globs)
+  > Can also be an object `{ path!: string, reverse?: boolean = false }`, note that while `reverse` works on globs and direct files alike, the latter will have no noticeable effect.
 - `authors` (optional, plugin) - A map of authors to avatars.
   > When using 'username' or 'embeds.*.author.name' in full payloads (yml, json), this map will be used if the related avatar or icon slot is not filled.
 

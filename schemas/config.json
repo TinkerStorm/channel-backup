@@ -33,8 +33,29 @@
     },
     "files": {
       "type": "array",
+      "description": "Files to send to Discord.",
       "items": {
-        "type": "string"        
+        "oneOf": [
+          {
+            "description": "Either direct path or glob.",
+            "type": "string"
+          },
+          {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "path": {
+                "description": "Either direct path or glob.",
+                "type": "string"
+              },
+              "reverse": {
+                "description": "Reverse the order of the files.",
+                "type": "boolean"
+              }
+            },
+            "required": [ "path" ]
+          }
+        ]
       }
     },
     "authors": {
