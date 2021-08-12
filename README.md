@@ -8,7 +8,7 @@
 
 A command line tool to help Community Managers keep their information channels updated.
 
-Notes on progress can be found on the [project board](https://github.com/TinkerStorm/channel-backup/projects/1) or on the [Discord channel](https://discord.gg/7k6uS7kw5k).
+Notes on progress can be found on the [project board](https://github.com/TinkerStorm/channel-backup/projects/1).
 
 I am aware this program does not follow the regular conventions of an interface, but I have done my best to ensure that it is *accessable* with regular scripts like you would use the terminal. *That said, I discourage it with upmost concern.* In theory, this can be applied to monorepo setups where multiple channels are setup with webhooks to keep their information up to date, all that would need to be done is run the command across all packages.
 
@@ -96,3 +96,10 @@ Options
 ## License
 
 This package uses the [MIT](LICENSE) license.
+
+---
+
+## Support & Share
+
+- If you use this package, we'd love to hear about how you use it.
+- If you need help or have a suggestion, open an issue or contact us on [Discord](https://discord.gg/7k6uS7kw5k).
