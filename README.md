@@ -70,16 +70,15 @@ Options
 
 ## File Support
 
-- Images are attached as `{ attachment, name: "{name}.{ext}" }`
-  - PNG
-  - GIF
-  - JPG / JPEG
-- Structured files are sent as is
-  - JSON
-  - YAML / YML
-  - TXT / MD *both treated as markdown*
-- Templates
-  > While there is no support for template engines like nunjucks, ejs or liquid - with the intention to move to plugins, these could become plugins themselves. The theorised event hooks / listeners will reinforce the design by having them listen for certain files (native file handlers will be included as standard but follow the same internal design as plugins).
+| Extensions | Description |
+| --- | --- |
+| `.md` / `.txt` | Markdown `{ content }` |
+| `.json` / `.yml` / `.yaml` | Raw payload |
+| `.png` / `.jpg` / `.jpeg` / `.gif` / `.webp` | Image `{ attachment, name: "{name}.{ext}" }` |
+
+Raw files are expected to use a file option that may look like `{ path: "./path/to/file.go", raw: true }`, using payload structure of *Image*. While `raw` is not supported yet, it is planned to be added in the future.
+  
+> While there is no support for template engines like nunjucks, ejs or liquid - with the intention to move to plugins, these could become plugins themselves. The theorised event hooks / listeners will reinforce the design by having them listen for certain files (native file handlers will be included as standard but follow the same internal design as plugins).
 
 ---
 
