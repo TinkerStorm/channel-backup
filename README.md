@@ -51,28 +51,22 @@ Options
   > Some properties may not exist here if they are added in plugins.
 - `webhook` - either a webhook uri as string or an object `{ id, token }`
   > Alternatively, this can be omitted in favor of using an environment variable.
-  > At present, `dotenv` is not used to load the environment variables on .
+  > At present, `dotenv` is not used to load the environment variables from a `.env`.
 - `files` - An array of files which are sent through the webhook (can either be direct files or globs)
 - `authors` (optional, plugin) - A map of authors to avatars.
   > When using 'username' or 'embeds.*.author.name' in full payloads (yml, json), this map will be used if the related avatar or icon slot is not filled.
 
-## Sequence Flow
+## [Sequence Flow](./src/index.js)
 
-```ini
-# * Loop through items
-# ~ Catch case
-# & Relative index
-
-[INIT] Begin
-[REPLACE] Deleted {id}
-[RESOLVE] {fileOrGlob}
-* [(SENT,EDIT)/{&index}] (Edit,Sent) content for {path}
-  ~ [SCAN] Unknown file type {ext} on {path}
-[POST-RUN] Removing excess messages and cached IDs.
-* [ClEANUP/{&index+i}] Removed {message}
-[POST-RUN] Attempting to export message cache
-[COMPLETE] Sequence complete
-```
+- [Delete old messages](./src/steps/conditional/cleanup.js) *if `--mode replace`*.
+- [Discover files](./src/steps/discover.js) as manifest
+- Iterate over discovered files
+  - [Build message payload](./src/steps/build.js)
+    > If payload is found to not exist, continue to next file.
+  - (Internal) *if embeds exist*, convert all to [MessageEmbed](https://discord.js.org/#/docs/main/stable/class/MessageEmbed)]
+  - plugin(post-render): [Resolve authors](./src/plugins/resolve-authors.js)
+  - [Send or Edit message](./src/steps/loop/handle-message.js)
+- [Cleanup excess messages](./src/steps/conditional/cleanup.js) *if `--mode update` and 'remainingMessages'*.
 
 ## File Support
 
