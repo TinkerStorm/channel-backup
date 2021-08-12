@@ -26,7 +26,10 @@
               "pattern": "^[A-Za-z0-9_-]+$"
             }
           },
-          "required": [ "id", "token" ],
+          "required": [
+            "id",
+            "token"
+          ],
           "additionalProperties": false
         }
       ]
@@ -34,7 +37,7 @@
     "files": {
       "type": "array",
       "items": {
-        "type": "string"        
+        "type": "string"
       }
     },
     "authors": {
@@ -48,5 +51,7 @@
       }
     }
   },
-  "required": [ "webhook", "files" ]
+  "required": [
+    "files"
+  ]
 }
