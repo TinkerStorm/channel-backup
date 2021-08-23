@@ -6,7 +6,6 @@
   "type": "object",
   "properties": {
     "webhook": {
-      "required": true,
       "description": "Webhook URL",
       "anyOf": [
         {
