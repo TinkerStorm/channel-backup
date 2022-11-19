@@ -1,9 +1,11 @@
 #!/usr/bin/env node
-import { writeFile } from 'node:fs/promises';
+import {writeFile} from 'node:fs/promises';
 import path from 'node:path';
+
 import meow from 'meow';
-import { loadFile } from './util/common.js';
-import { sequence } from './index.js';
+
+import {loadFile} from './util/common.js';
+import {sequence} from './index.js';
 
 const cli = meow(`
 	Usage
@@ -52,7 +54,9 @@ const cli = meow(`
 			process.exit(1);
 		});
 
-	if (config.threadID) hadThreadID = true;
+	if (config.threadID) {
+		hadThreadID = true;
+	}
 
 	const cache = await loadFile(cli.flags.directory, 'cache.json')
 		.then(file => JSON.parse(file.toString()))
@@ -66,15 +70,20 @@ const cli = meow(`
 
 	if (typeof config.webhook === 'string') {
 		const url = new URL(config.webhook);
-		if (!url.hostname.endsWith('discord.com')) throw new Error('Invalid webhook URL.');
-		if (!/^\/api\/(?:v10\/)?webhooks/.test(url.pathname))
+		if (!url.hostname.endsWith('discord.com')) {
+			throw new Error('Invalid webhook URL.');
+		}
+
+		if (!/^\/api\/(?:v10\/)?webhooks/.test(url.pathname)) {
 			throw new Error('Webhook URL does not start with the correct path.');
-		const [token, id] = url.pathname.split('/').filter(v => v).reverse();
+		}
+
+		const [token, id] = url.pathname.split('/').filter(Boolean).reverse();
 		config.threadID ??= url.searchParams.get('thread_id');
-		config.webhook = { id, token };
+		config.webhook = {id, token};
 	}
 
-	// join webhook.id, and threadID if it exists - which will overwrite any threadID in message payloads
+	// Join webhook.id, and threadID if it exists - which will overwrite any threadID in message payloads
 	let cacheKey = `${config.webhook.id}${'threadID' in config ? `-${config.threadID}` : ''}`;
 
 	const result = await sequence({
@@ -86,7 +95,7 @@ const cli = meow(`
 	});
 
 	if (!hadThreadID && result.config.threadID) {
-		// obtain unpolluted config file and add threadID
+		// Obtain unpolluted config file and add threadID
 		// - webhooks have no way of determining threadID without it to begin with
 		// - also can't determine if the target channel is a forum channel
 		const fileConfig = await loadFile(cli.flags.directory, cli.flags.config)
@@ -96,7 +105,7 @@ const cli = meow(`
 
 		await writeFile(
 			path.resolve(cli.flags.directory, cli.flags.config),
-			JSON.stringify(fileConfig, null, 2)
+			JSON.stringify(fileConfig, null, 2),
 		);
 
 		cacheKey = `${config.webhook.id}-${result.config.threadID}`;
@@ -109,8 +118,8 @@ const cli = meow(`
 
 	await writeFile(path.join(cli.flags.directory, 'cache.json'), JSON.stringify(cache));
 	result.log(`steps(cleanup:${cli.flags.mode}): ${result.messages.length} messages.`);
-})().catch((err) => {
-	console.error(err);
+})().catch(error => {
+	console.error(error);
 	// eslint-disable-next-line node/prefer-global/process
 	process.exit(1);
 });

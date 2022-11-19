@@ -1,4 +1,4 @@
-import { getMessageTarget } from "../util/common.js";
+import { getMessageTarget } from '../util/common.js';
 
 /**
  * @typedef {Record<`${number}`, import("discord-microhook").Message>} MessageCache

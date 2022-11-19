@@ -10,11 +10,13 @@ export default async function cleanup(context, messages = context.cache) {
 
 		// Skip if this is the first message of a thread
 		// Only the initial message in a forum post allows Header and List markup
-		if (message.id === message.channelID) continue;
+		if (message.id === message.channelID) {
+			continue;
+		}
 
-		const [target, targetID] = context.webhook.channelID !== message.channelID
-			? ["thread", message.channelID]
-			: ["channel", context.webhook.channelID];
+		const [target, targetID] = context.webhook.channelID === message.channelID
+			? ['channel', context.webhook.channelID]
+			: ['thread', message.channelID];
 
 		try {
 			context.log(`steps(cleanup): Deleting message '${message.id}' in ${target} (\`${targetID}\`)`);

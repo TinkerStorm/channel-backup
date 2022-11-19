@@ -1,4 +1,4 @@
-import { Webhook } from 'discord-microhook';
+import {Webhook} from 'discord-microhook';
 // #region Steps
 import cleanup from './steps/conditional/cleanup.js';
 import discover from './steps/discover.js';
@@ -43,30 +43,29 @@ import fetchAll from './steps/fetch-all.js';
  * @returns {Promise<SequenceUnion>}
  */
 export async function sequence(options) {
-
 	/** @type {SequenceUnion} */
 	const context = {
 		...options,
 		messages: [],
-		log: (message, { force = false } = {}) => {
+		log(message, {force = false} = {}) {
 			if (options.verbose || force) {
 				console.log(message);
 			}
 		},
-		webhook: new Webhook(options.config.webhook)
+		webhook: new Webhook(options.config.webhook),
 	};
 
 	try {
 		await context.webhook.fetch();
 	} catch (error) {
-		context.log(`fail:sequence() Failed to fetch webhook: ${error}`, { force: true });
+		context.log(`fail:sequence() Failed to fetch webhook: ${error}`, {force: true});
 		return;
 	}
 
-	if (context.cache.length) {
+	if (context.cache.length > 0) {
 		context.history = await fetchAll(context);
 	} else {
-		context.log(`warn:sequence() No messages to process`, { force: true });
+		context.log('warn:sequence() No messages to process', {force: true});
 	}
 
 	if (context.mode === 'replace') {
@@ -76,7 +75,6 @@ export async function sequence(options) {
 	const manifest = await discover(context);
 	let skippedFiles = 0;
 
-	// eslint-disable-next-line guard-for-in
 	for (const [index, filePath] of manifest.entries()) {
 		let payload = await buildPayload(context, filePath);
 		if (!payload) {

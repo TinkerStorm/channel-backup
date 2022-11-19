@@ -2,7 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 
 // {threadID}-{messageID} / {messageID}
-export const THREAD_SPLIT = "-";
+export const THREAD_SPLIT = '-';
 
 /**
  * @param {...string} pathSegments can either be absolute or relative path
@@ -22,21 +22,21 @@ export function delay(ms) {
  * @param {number} cacheIndex
  */
 export function getMessageTarget(ctx, cacheIndex) {
-	const { channelID } = ctx.webhook;
+	const {channelID} = ctx.webhook;
 
 	const messageID = ctx.cache[cacheIndex];
-	const { threadID } = ctx.config;
+	const {threadID} = ctx.config;
 
-	return { threadID, messageID, channelID };
+	return {threadID, messageID, channelID};
 }
 
 /**
- * 
- * @param {import('../index').SequenceUnion} ctx 
- * @param {import('discord-microhook').Message} message 
+ *
+ * @param {import('../index').SequenceUnion} ctx
+ * @param {import('discord-microhook').Message} message
  */
 export function buildMessageTarget(ctx, message) {
-	return ctx.config.threadID // determine if threadID is shared for this sequence
+	return ctx.config.threadID // Determine if threadID is shared for this sequence
 		// if not, use the threadID from the message channel
 		? `${message.channelID}${THREAD_SPLIT}${message.id}`
 		: message.id;
@@ -49,18 +49,28 @@ export function buildMessageTarget(ctx, message) {
  * @returns {boolean}
  */
 export function isPayloadEqual(source, external) {
-	for (const key of Object.keys(source)) {		
-		if (['files', 'threadID', 'thread_name'].includes(key)) continue;
+	for (const key of Object.keys(source)) {
+		if (['files', 'threadID', 'thread_name'].includes(key)) {
+			continue;
+		}
 
 		if (Array.isArray(source[key])) {
-			if (source[key].length !== external[key].length) return false;
+			if (source[key].length !== external[key].length) {
+				return false;
+			}
 
 			for (const [index, value] of source[key].entries()) {
-				if (!isPayloadEqual(value, external[key][index])) return false;
+				if (!isPayloadEqual(value, external[key][index])) {
+					return false;
+				}
 			}
 		} else if (typeof source[key] === 'object') {
-			if (!isPayloadEqual(source[key], external[key])) return false;
-		} else if (source.length && source[key] !== external[key]) return false;
+			if (!isPayloadEqual(source[key], external[key])) {
+				return false;
+			}
+		} else if (source.length > 0 && source[key] !== external[key]) {
+			return false;
+		}
 	}
 
 	return true;
