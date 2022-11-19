@@ -1,15 +1,16 @@
-import {MessageEmbed} from 'discord.js';
+import { Webhook } from 'discord-microhook';
 // #region Steps
 import cleanup from './steps/conditional/cleanup.js';
 import discover from './steps/discover.js';
 import buildPayload from './steps/loop/build-payload.js';
 import authorResolver from './plugins/author-resolver.js';
 import handleMessage from './steps/loop/handle-message.js';
+import fetchAll from './steps/fetch-all.js';
 // #endregion
 
 /**
  * @typedef {Object} SequenceOptions
- * @property {{webhook:any,files:string[]}} config
+ * @property {ConfigOptions} config
  * @property {string} [mode='update']
  * @property {string} [directory=process.cwd()]
  * @property {boolean} [verbose=true]
@@ -17,20 +18,56 @@ import handleMessage from './steps/loop/handle-message.js';
  */
 
 /**
+ * @typedef {Object} ConfigOptions
+ * @property {{id:string,token:string}|string} [webhook]
+ * @property {string[]} files
+ * @property {string} [directory]
+ * @property {string} mode
+ * @property {boolean} [verbose]
+ * @property {string?} [threadID]
+ * @property {string?} [thread_name]
+ */
+
+/**
+ * @typedef {Object} SequenceContext
+ * @property {import("discord-microhook").Message[]} messages
+ * @property {Record<string, import("discord-microhook").Message>} history
+ * @property {import("discord-microhook").Webhook} webhook - Webhook instance (discord-microhook)
+ * @property {(msg:string,{force}:{force:boolean})=>void} log - Log function
+ */
+
+/** @typedef {SequenceOptions & SequenceContext} SequenceUnion */
+
+/**
  * @param {SequenceOptions} options
- * @returns {Promise<SequenceOptions & { messages: string[] }>}
+ * @returns {Promise<SequenceUnion>}
  */
 export async function sequence(options) {
-	/** @extends {SequenceOptions} */
+
+	/** @type {SequenceUnion} */
 	const context = {
 		...options,
 		messages: [],
-		log: (message, {force = false} = {}) => {
+		log: (message, { force = false } = {}) => {
 			if (options.verbose || force) {
 				console.log(message);
 			}
 		},
+		webhook: new Webhook(options.config.webhook)
 	};
+
+	try {
+		await context.webhook.fetch();
+	} catch (error) {
+		context.log(`fail:sequence() Failed to fetch webhook: ${error}`, { force: true });
+		return;
+	}
+
+	if (context.cache.length) {
+		context.history = await fetchAll(context);
+	} else {
+		context.log(`warn:sequence() No messages to process`, { force: true });
+	}
 
 	if (context.mode === 'replace') {
 		await cleanup(context);
@@ -40,19 +77,12 @@ export async function sequence(options) {
 	let skippedFiles = 0;
 
 	// eslint-disable-next-line guard-for-in
-	for (const index in manifest) {
-		const filePath = manifest[index];
-
-		/** @type {import("discord.js").WebhookMessageOptions} */
+	for (const [index, filePath] of manifest.entries()) {
 		let payload = await buildPayload(context, filePath);
-		if (!payload || payload === null || payload === undefined) {
+		if (!payload) {
 			skippedFiles++;
 			context.log(`steps(build-payload): Skipping '${filePath}', content missing`);
 			continue; // Unknown file type catch
-		}
-
-		if (payload.embeds) {
-			payload.embeds = payload.embeds.map(embed => new MessageEmbed(embed));
 		}
 
 		// Event hook: render (plugin)

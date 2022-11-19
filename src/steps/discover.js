@@ -1,6 +1,9 @@
-import {join} from 'node:path';
+import {join, relative} from 'node:path';
 import {isGitIgnored, isDynamicPattern, globby} from 'globby';
 
+/**
+ * @param {import('../index').SequenceUnion} ctx
+ */
 export default async function discover(ctx) {
 	const manifest = [];
 	const isIgnored = await isGitIgnored({cwd: ctx.directory});
@@ -10,9 +13,9 @@ export default async function discover(ctx) {
 			? await globby(file, {cwd: ctx.directory})
 			: [file];
 
-		manifest.push(...found);
+		manifest.push(...found.map(path => relative(ctx.directory, path)));
 
-		ctx.log(`Found ${found.length} files in ${file}`);
+		ctx.log(`steps(discover): Found ${found.length} files in ${file}`);
 	}
 
 	return manifest.filter(file => !isIgnored(file))

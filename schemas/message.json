@@ -21,6 +21,13 @@
         "$ref": "#/definitions/embed"
       }
     },
+    "components": {
+      "type": "array",
+      "description": "Components in the message.",
+      "items": {
+        "$ref": "#/definitions/component-row"
+      }
+    },
     "tts": {
       "type": "boolean",
       "description": "Whether the message is a TTS message."
@@ -34,7 +41,103 @@
       "description": "The username of the message author."
     }
   },
-  "definitions": {
+  "$defs": {
+    "component": {
+      "type": "object",
+      "description": "A Discord component.",
+      "properties": {
+        "type": {
+          "type": "number",
+          "description": "The type of the component.",
+          "enum": [2, 3]
+        },
+        "style": {
+          "type": "number",
+          "description": "The style of the component.",
+          "enum": [1, 2, 3, 4, 5]
+        },
+        "label": {
+          "type": "string",
+          "description": "The label of the component.",
+          "maxLength": 80
+        },
+        "emoji": {
+          "$ref": "#/definitions/emoji",
+          "description": "The emoji of the component."
+        },
+        "custom_id": {
+          "type": "string",
+          "description": "The custom ID of the component.",
+          "maxLength": 100
+        },
+        "url": {
+          "type": "string",
+          "description": "The URL of the component.",
+          "format": "uri"
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Whether the component is disabled."
+        },
+        "options": {
+          "type": "array",
+          "description": "The options of the component.",
+          "items": {
+            "$ref": "#/definitions/select-option"
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "The placeholder of the component.",
+          "maxLength": 100
+        },
+        "min_values": {
+          "type": "integer",
+          "description": "The minimum number of values the component can have.",
+          "minimum": 1,
+          "maximum": 25
+        },
+        "max_values": {
+          "type": "integer",
+          "description": "The maximum number of values the component can have.",
+          "minimum": 1,
+          "maximum": 25
+        }
+      },
+      "required": ["type"],
+      "oneOf": [
+        {
+          "required": ["style", "label", "custom_id"]
+        },
+        {
+          "required": ["style", "label", "url"]
+        },
+        {
+          "required": ["custom_id"]
+        },
+        {
+          "required": ["options", "custom_id"]
+        }
+      ]
+    },
+    "component-row": {
+      "type": "object",
+      "description": "A row of components.",
+      "properties": {
+        "type": {
+          "type": "number",
+          "description": "The type of the component.",
+          "enum": [1]
+        },
+        "components": {
+          "type": "array",
+          "description": "The components in the row.",
+          "items": {
+            "$ref": "#/definitions/component"
+          }
+        }
+      }
+    },
     "embed": {
       "type": "object",
       "properties": {

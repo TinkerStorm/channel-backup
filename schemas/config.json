@@ -12,7 +12,7 @@
         {
           "type": "string",
           "format": "uri",
-          "pattern": "^https?:\/\/discord\\.com\/api\/webhooks\/[0-9]+\/[A-Za-z0-9_-]+$"
+          "pattern": "^https?:\/\/discord\\.com\/api(?:\/v10)\/webhooks\/[0-9]+\/[A-Za-z0-9_-]+$"
         },
         {
           "type": "object",
@@ -49,8 +49,31 @@
           "description": "The avatar to resolve to."
         }
       }
+    },
+    "threadID": {
+      "type": "string",
+      "description": "The ID of the thread to post to.",
+      "pattern": "^[0-9]{17,21}$"
+    },
+    "thread_name": {
+      "type": "string",
+      "description": "The name of the thread to post to.",
+      "pattern": "^.{1,100}$"
     }
   },
+  "oneOf": [
+    {},
+    {
+      "required": [
+        "thread_id"
+      ]
+    },
+    {
+      "required": [
+        "thread_name"
+      ]
+    }
+  ],
   "required": [
     "files"
   ]

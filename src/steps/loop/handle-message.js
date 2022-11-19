@@ -1,22 +1,47 @@
-// !import {Util} from 'discord.js';
-import {delay, getWebhook} from '../../util/common.js';
+import { getMessageTarget, isPayloadEqual } from '../../util/common.js';
+
 /**
- * @param {any} ctx
- * @param {WebhookMessageOptions} payload
+ * @param {import('../../index.js').SequenceUnion} ctx
+ * @param {import('discord-microhook').BaseMessageOptions} payload
  * @param {string} path
- * @param {string} index
+ * @param {number} index
  */
 export default async function handleMessage(ctx, payload, path, index) {
 	// MergedPayload = Util.mergeDefault(ctx.config.defaultPayload || {}, payload);
-	const cacheID = ctx.cache[index];
-	const webhook = getWebhook(ctx);
+	const { messageID, threadID } = getMessageTarget(ctx, index);
 
-	const message = await (ctx.mode === 'update' && cacheID
-		? webhook.editMessage(cacheID, payload)
-		: webhook.send(payload));
+	// Ensure destruction of prior message data related to threads, sequence should not split between messages
+	if (payload.threadID) delete payload.threadID;
+	if (payload.thread_name) delete payload.thread_name;
 
-	ctx.messages.push(message.id);
+	if (threadID) {
+		payload.threadID = threadID;
+	}
+
+	const targetID = threadID ?? ctx.webhook.channelID;
+	const reference = ctx.history[`${targetID}-${messageID}`];
+
+	// if thread_name exists, create a new thread - assumed as forum channel
+	// threadID is used from the response to set the new threadID
+	if (!payload.threadID && index === 0 && ctx.config.thread_name)
+		payload.thread_name = ctx.config.thread_name;
+
+	if (messageID && isPayloadEqual(payload, reference)) {
+		ctx.log(`steps(handle-message) Main payload unchanged, skipping message ${messageID} - ${index}`);
+		ctx.messages.push(reference);
+		return;
+	}
+
+	const message = await (ctx.mode === 'update' && messageID
+		? ctx.webhook.editMessage(messageID, payload)
+		: ctx.webhook.sendMessage(payload));
+
+	// Only allow updating context target for the first message
+	if (index === 0 && payload.thread_name && !threadID) {
+		ctx.config.threadID = message.channelID;
+		ctx.log(`steps(handle-message): Created thread "${payload.thread_name}" (${threadID})`);
+	}
+
+	ctx.messages.push(message);
 	ctx.log(`steps(handle-message) '${path}' -> '${message.id}'`);
-
-	await delay(1000);
 }

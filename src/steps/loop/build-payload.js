@@ -5,7 +5,7 @@ import {loadFile} from '../../util/common.js';
 /**
  * @param {any} ctx
  * @param {string} filePath
- * @returns {Promise<import("discord.js").WebhookMessageOptions>}
+ * @returns {Promise<import("discord-microhook").BaseMessageOptions>}
  */
 export default async function buildPayload(ctx, filePath) {
 	const {name, ext} = parse(filePath);

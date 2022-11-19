@@ -55,6 +55,9 @@ Options
 - `files` - An array of files which are sent through the webhook (can either be direct files or globs)
 - `authors` (optional, plugin) - A map of authors to avatars.
   > When using 'username' or 'embeds.*.author.name' in full payloads (yml, json), this map will be used if the related avatar or icon slot is not filled.
+- `threadID` - The ID of the thread to send the message to.
+- `thread_name` - (Forums only) The name of the thread to send the message to. Only used if `threadID` is not provided.
+  > This program will overwrite the config file when the new `threadID` is returned from it's first request.
 
 ## [Sequence Flow](./src/index.js)
 

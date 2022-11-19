@@ -1,12 +1,14 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import {WebhookClient} from 'discord.js';
+
+// {threadID}-{messageID} / {messageID}
+export const THREAD_SPLIT = "-";
 
 /**
- * @param {...string[]} pathSegements can either be absolute or relative path
+ * @param {...string} pathSegments can either be absolute or relative path
  */
-export function loadFile(...pathSegements) {
-	return fs.readFile(path.resolve(...pathSegements));
+export function loadFile(...pathSegments) {
+	return fs.readFile(path.resolve(...pathSegments));
 }
 
 // Delay for {ms} milliseconds
@@ -15,7 +17,51 @@ export function delay(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export function getWebhook(context) {
-	return new WebhookClient(context.config.webhook);
-	// { id, token } | { url }
+/**
+ * @param {import('../index').SequenceUnion} ctx
+ * @param {number} cacheIndex
+ */
+export function getMessageTarget(ctx, cacheIndex) {
+	const { channelID } = ctx.webhook;
+
+	const messageID = ctx.cache[cacheIndex];
+	const { threadID } = ctx.config;
+
+	return { threadID, messageID, channelID };
+}
+
+/**
+ * 
+ * @param {import('../index').SequenceUnion} ctx 
+ * @param {import('discord-microhook').Message} message 
+ */
+export function buildMessageTarget(ctx, message) {
+	return ctx.config.threadID // determine if threadID is shared for this sequence
+		// if not, use the threadID from the message channel
+		? `${message.channelID}${THREAD_SPLIT}${message.id}`
+		: message.id;
+}
+
+/**
+ * Check
+ * @param {any} source
+ * @param {any} external
+ * @returns {boolean}
+ */
+export function isPayloadEqual(source, external) {
+	for (const key of Object.keys(source)) {		
+		if (['files', 'threadID', 'thread_name'].includes(key)) continue;
+
+		if (Array.isArray(source[key])) {
+			if (source[key].length !== external[key].length) return false;
+
+			for (const [index, value] of source[key].entries()) {
+				if (!isPayloadEqual(value, external[key][index])) return false;
+			}
+		} else if (typeof source[key] === 'object') {
+			if (!isPayloadEqual(source[key], external[key])) return false;
+		} else if (source.length && source[key] !== external[key]) return false;
+	}
+
+	return true;
 }
