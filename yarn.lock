@@ -544,9 +544,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-"discord-microhook@link:../../../projects/discord-microhook":
-  version "0.0.0"
-  uid ""
+discord-microhook@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/discord-microhook/-/discord-microhook-1.0.1.tgz#e5fcd1a91235916ed653bb0e85378a4f94818459"
+  integrity sha512-N5ktBhJyaOjj5K+U6sRgFdVaEI/5Dg9J6qn6jF3GLfAp1waJopPPf9nyjJbGd6RZriMDjYTDdkwQhup2TTC5lg==
 
 doctrine@^2.1.0:
   version "2.1.0"
