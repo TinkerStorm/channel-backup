@@ -1,13 +1,13 @@
 
 /**
- * @param {any} ctx
- * @param {import("discord.js".WebhookMessageOptions} payload
- * @returns {import("discord.js".WebhookMessageOptions}
+ * @param {import("../index").SequenceUnion} ctx
+ * @param {import("discord-microhook").BaseMessageOptions} payload
+ * @returns {import("discord-microhook").BaseMessageOptions}
  */
 export default function authorResolver(ctx, payload) {
 	const {authors} = ctx.config;
 
-	if (!authors) {
+	if (!authors)	{
 		return payload;
 	}
 
