@@ -24,7 +24,7 @@ export default async function handleMessage(ctx, payload, path, index) {
 	}
 
 	const targetID = threadID ?? ctx.webhook.channelID;
-	const reference = ctx.history[`${targetID}-${messageID}`];
+	const reference = ctx.history ? ctx.history[`${targetID}-${messageID}`] : null;
 
 	// If thread_name exists, create a new thread - assumed as forum channel
 	// threadID is used from the response to set the new threadID
