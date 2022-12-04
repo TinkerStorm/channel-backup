@@ -84,7 +84,7 @@ const cli = meow(`
 	}
 
 	// Join webhook.id, and threadID if it exists - which will overwrite any threadID in message payloads
-	let cacheKey = `${config.webhook.id}${'threadID' in config ? `-${config.threadID}` : ''}`;
+	let cacheKey = `${config.webhook.id}${config.threadID ? `-${config.threadID}` : ''}`;
 
 	const result = await sequence({
 		config,
