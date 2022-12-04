@@ -539,10 +539,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-discord-microhook@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/discord-microhook/-/discord-microhook-1.0.2.tgz#0bd5caa1326e182e417c0f8b46304c89208d4fe6"
-  integrity sha512-50Jhr/hYg+05WsLYqnr1ULNa2nQeeb1mgdkkdAZqypiFZTe8hi3eeL7yaO39VqMJlPS4jNM1djSQ5oWgBbY11w==
+discord-microhook@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/discord-microhook/-/discord-microhook-1.0.5.tgz#bb2f19366625161d7fdb5fd692fcbec14f8202b1"
+  integrity sha512-1lYVzUmo8PxSs7MfB4N4YNQ96KkTfM26SASOZcSPVyPppwCs/l0tgDcvuDxZBjZV0FZOM32dWCmj5BdmILQFqw==
 
 doctrine@^2.1.0:
   version "2.1.0"
