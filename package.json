@@ -1,6 +1,6 @@
 {
   "name": "channel-backup",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A command line / actions tool to help Community Managers keep their information channels updated.",
   "exports": "./src/index.js",
   "repository": "https://github.com/TinkerStorm/channel-backup.git",
