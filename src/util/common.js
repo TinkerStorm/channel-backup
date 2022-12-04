@@ -55,6 +55,10 @@ export function isPayloadEqual(source, external) {
 		}
 
 		if (Array.isArray(source[key])) {
+			if (!Array.isArray(external[key])) {
+				return false;
+			}
+			
 			if (source[key].length !== external[key].length) {
 				return false;
 			}
